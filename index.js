@@ -14,7 +14,7 @@ const jwtSecretKey = process.env.JWT_KEY;
 const corsOptions = {
   origin: "*",
   credentials: true,
-  openSuccessStatus: 200,
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
