@@ -17,8 +17,8 @@ const corsOptions = {
   openSuccessStatus: 200,
 };
 
-app.use(express.json());
 app.use(cors(corsOptions));
+app.use(express.json());
 
 app.get("/", (req, res) => res.send("Express Started"));
 
@@ -39,7 +39,7 @@ const verifyJwt = (req, res, next) => {
 };
 
 app.post("/signup", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { userName: name, email, password } = req.body;
 
   try {
     const alreadyUser = await User.findOne({ email });
@@ -53,7 +53,7 @@ app.post("/signup", async (req, res) => {
     }
 
     const newUser = new User({ name, email, password });
-    newUser.password = await bcrypt.hash(newUser.password, 10);
+    newUser.password = await bcrypt.hash(password, 10);
     const savedUser = await newUser.save();
 
     if (!savedUser) {
@@ -61,6 +61,8 @@ app.post("/signup", async (req, res) => {
         message: "Request cannot happen may be due to client error",
         success: false,
       });
+
+      return;
     }
 
     res
